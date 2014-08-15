@@ -30,13 +30,94 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="/imgur-please-dont-be-a-tinypic-or-imageshack.html">imgur, please don't be a tinypic or imageshack</a></h1> 
+                    <h1 class="entry-title"><a href="/imgur-please-dont-be-the-next-tinypic-or-imageshack.html">imgur, please don't be the next tinypic or imageshack</a></h1> 
 <footer class="post-info">
         <abbr class="published" title="2014-08-15T00:01:00">
                 Fri 15 August 2014
         </abbr>
-</footer><!-- /.post-info --><p>This is a test. Lorem ipsum something something. It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
-<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</p>                </article>
+</footer><!-- /.post-info --><p>I like using Imgur. It's reasonably fast and usable. That was what everyone thought about Imageshack.us, Tinypic, or Photobucket back in the day, too. Previously, Imgur had a quick loading frontpage that showed a couple of images and an upload by file or URL button, with a direct link to a HTML uploader (/?noFlash) -- Flash being enabled even very shortly drains the batteries of a lot of mobile and laptop devices.</p>
+<p>Things have changed now. In the past year or two, Imgur has added features such as a meme generator, a new frontpage, and more as they started to branch out from being reddit's adopted child into an independent entity.</p>
+<p>Unfortunately, this seems to have come with a price.</p>
+<ul>
+<li>"The Most Viral images on the Internet, sorted by popularity" frontpage now grabs <b>80 images</b> on page load.</li>
+<li>Flash disabled / click-to-play now requires you to <a href='/images/imgur-click-to-run.png'>manually hide the element</a>.</li>
+<li>
+<p>If you don't have an account, direct links <a href='/images/imgur-direct-links.png'>are no longer easily copyable</a>, requiring you to Copy Image Location from the image. </p>
+</li>
+<li>
+<p>Direct links no longer work at all on a number of sites. Many major sites get forcefully redirected to the "comment page". This is especially infuriating when clicking imgur links on mobile, because of all the extraneous data, pointless comments, ad beacons, analytics beacons, etc.</p>
+</li>
+</ul>
+<p>The below table was generated based on the top sites ranked by Alexa and the function below.<br />
+<code>$ wget http://s3.amazonaws.com/alexa-static/top-1m.csv.zip; unzip top-1m.csv.zip; head -n 100 top-1m.csv</code></p>
+<table>
+<thead>
+<tr>
+<th>Referrer</th>
+<th>Result</th>
+<th>HTTP</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>facebook.com</td>
+<td>Redirected</td>
+<td>302</td>
+<td>http://imgur.com/e2icdK6</td>
+</tr>
+<tr>
+<td>twitter.com</td>
+<td>Redirected</td>
+<td>302</td>
+<td>http://imgur.com/e2icdK6</td>
+</tr>
+<tr>
+<td>pinterest.com</td>
+<td>Redirected</td>
+<td>302</td>
+<td>http://imgur.com/e2icdK6</td>
+</tr>
+<tr>
+<td>stumbleupon.com</td>
+<td>Redirected</td>
+<td>302</td>
+<td>http://imgur.com/e2icdK6</td>
+</tr>
+<tr>
+<td>twitch.tv</td>
+<td>Redirected</td>
+<td>302</td>
+<td>http://imgur.com/e2icdK6</td>
+</tr>
+<tr>
+<td>t.co</td>
+<td>Redirected</td>
+<td>302</td>
+<td>http://imgur.com/e2icdK6</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span class="x">function Get(string $referrer): string {</span>
+<span class="x">   $url = (string) &quot;http://i.imgur.com/e2icdK6.jpg&quot;;</span>
+
+<span class="x">   $c = curl_init();</span>
+<span class="x">   curl_setopt($c, CURLOPT_URL, $url);</span>
+<span class="x">   curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);</span>
+<span class="x">   curl_setopt($c, CURLOPT_USERAGENT, &quot;Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25&quot;);</span>
+<span class="x">   curl_setopt($c, CURLOPT_REFERER, &quot;http://www.{$referrer}&quot;);</span>
+<span class="x">   curl_setopt($c, CURLOPT_HEADER, 1);</span>
+
+<span class="x">   $temp = curl_exec($c);</span>
+<span class="x">   $header_size = curl_getinfo($c, CURLINFO_HEADER_SIZE);</span>
+<span class="x">   $header = substr($temp, 0, $header_size);</span>
+<span class="x">   $header = http_parse_headers($header);</span>
+
+<span class="x">   if (isset($header[&#39;Location&#39;])) {</span>
+<span class="x">       return $header[&#39;Location&#39;];</span>
+<span class="x">   } else { return $url; }</span>
+<span class="x">}</span>
+</pre></div>                </article>
             </aside><!-- /#featured -->
             </ol><!-- /#posts-list -->
             </section><!-- /#content -->
